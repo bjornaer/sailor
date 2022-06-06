@@ -22,7 +22,7 @@ type PortData struct {
 	Code        string    `json:"code"`
 }
 
-type PortHandler func(portKey string, portData PortData) interface{}
+type PortHandler func(portKey string, portData PortData)
 
 func HandlePorts(fileName string, portHandler PortHandler) error {
 	f, err := os.Open(fileName)

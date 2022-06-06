@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -9,15 +10,30 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/bjornaer/sailor/internal/port"
 	"github.com/gin-gonic/gin"
 )
+
+func digestPorts(c *gin.Context) {
+	fileName := os.Getenv("PORTS_FILE")
+	if len(fileName) == 0 {
+		fileName = "./ports.json"
+	}
+	err := port.HandlePorts(fileName, func(portKey string, portData port.PortData) {
+		fmt.Printf("Port Key %s : Port Data %v", portKey, portData.Name)
+	})
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	c.String(http.StatusOK, "Finished updating DB with ports data!")
+}
 
 func main() {
 	router := gin.Default()
 	router.GET("/", func(c *gin.Context) {
-		time.Sleep(5 * time.Second)
-		c.String(http.StatusOK, "Welcome Gin Server")
+		c.String(http.StatusOK, "Welcome to the Port Domain Service!")
 	})
+	router.GET("/digest", digestPorts)
 
 	srv := &http.Server{
 		Addr:    ":8080",
