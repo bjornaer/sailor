@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	router := setupRouter()
+	router := SetupRouter()
 
 	srv := &http.Server{
 		Addr:    ":8080",

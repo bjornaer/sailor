@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func setupRouter() *gin.Engine {
+func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "Hello Sailor! Welcome to the Port Domain Service!")
@@ -24,7 +24,7 @@ func processPorts(c *gin.Context) {
 		fileName = "./ports.json"
 	}
 	err := port.HandlePorts(fileName, func(portKey string, portData port.PortData) {
-		fmt.Printf("Port Key %s : Port Data %v", portKey, portData.Name)
+		fmt.Printf("| Port Key: %s | Port Name: %v | \n", portKey, portData.Name)
 	})
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)

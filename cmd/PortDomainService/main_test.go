@@ -1,15 +1,16 @@
-package main
+package main_test
 
 import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	p "github.com/bjornaer/sailor/cmd/PortDomainService"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHelloRoute(t *testing.T) {
-	router := setupRouter()
+	router := p.SetupRouter()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/", nil)
