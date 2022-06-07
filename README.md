@@ -62,9 +62,14 @@ The data file can be passed in as an ENV var under the name `PORTS_FILE`.
 You can run the app with the docker compose file provided in this codebase. Please make sure you have Docker setup.
 
 1. pull a redis docker image: `docker pull bitnami/redis:latest`
-2. run `docker-compose up`
-3. ???
-4. profit
+2. Set the env vars mentioned in the [Run Section](#run)
+3. Build your docker image and run it!
+
+**OR**
+
+1. run `docker-compose up`
+2. ???
+3. profit
 
 ---
 ### Tests
