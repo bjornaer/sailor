@@ -7,7 +7,7 @@ This is a service which runs a very rudimentary Gin Gonic server, whose sole pur
 
 ### Run 
 
-To run this with a "redis" instance as a DB first setup a redis locally (however you prefer) set the ENV variable `REDIS_ADDR` and then modify the code in `main.go` to initialize DB with "redis"
+To run this with a "redis" instance as a DB first setup a redis locally (however you prefer) set the ENV variable `DB_ADDR=<your redis address>` and `DB_BACKEND="redis"`
 
 To run this using a map in memory simply follow the below instruction:
 
@@ -20,6 +20,17 @@ make <YOUR_OS>
 ```
 
 and then call on the binary!
+
+### API
+
+This service runs a simple REST api. The endpoints in place are to POST a Port, GET a Port, and execute a processing of a Port Data File.
+
+The data file can be passed in as an ENV var under the name `PORTS_FILE`.
+
+- `POST /port`
+- `GET /port/<port-id>`
+- `GET /process`
+- `GET /`
 
 ### Tests
 
@@ -53,8 +64,3 @@ To clean up any generated file you can run
 make clean
 ```
 
-### API
-
-This service runs a simple REST api. The endpoints in place are to POST a Port, GET a Port, and execute a processing of a Port Data File.
-
-The data file can be passed in as an ENV var under the name `PORTS_FILE`.

@@ -13,16 +13,26 @@ import (
 	s "github.com/bjornaer/sailor/internal/sessionmanager"
 )
 
-func main() {
-	redisAddr := os.Getenv("REDIS_ADDR")
-	if len(redisAddr) == 0 {
-		redisAddr = "localhost:6379"
+// returns dbAddr, dbBackend, portsFileName
+func getEnvVars() (string, string, string) {
+	dbAddr := os.Getenv("DB_ADDR")
+	if len(dbAddr) == 0 {
+		dbAddr = "localhost:6379"
+	}
+	dbBackend := os.Getenv("DB_BACKEND")
+	if len(dbBackend) == 0 {
+		dbAddr = "map"
 	}
 	portsFileName := os.Getenv("PORTS_FILE")
 	if len(portsFileName) == 0 {
 		portsFileName = "./ports.json"
 	}
-	dbClient, err := db.InitDBClient() // "redis", redisAddr
+	return dbAddr, dbBackend, portsFileName
+}
+
+func main() {
+	dbAddr, dbBackend, portsFileName := getEnvVars()
+	dbClient, err := db.InitDBClient(dbBackend, dbAddr)
 	if err != nil {
 		log.Fatal("Failed initialising DB connection")
 	}
