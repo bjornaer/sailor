@@ -8,10 +8,23 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/bjornaer/sailor/internal/db"
+	s "github.com/bjornaer/sailor/internal/sessionmanager"
 )
 
 func main() {
-	router := SetupRouter()
+	etcdAddr := os.Getenv("ETCD_ADDR")
+	if len(etcdAddr) == 0 {
+		etcdAddr = "127.0.0.1:2379"
+	}
+	portsFileName := os.Getenv("PORTS_FILE")
+	if len(portsFileName) == 0 {
+		portsFileName = "./ports.json"
+	}
+	dbClient := db.InitDBClient() // "etcd", etcdAddr
+	sm := &s.SessionManager{UpdatesFile: portsFileName, DBClient: dbClient}
+	router := SetupRouter(sm)
 
 	srv := &http.Server{
 		Addr:    ":8080",
