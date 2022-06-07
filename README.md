@@ -1,5 +1,5 @@
 # sailor
-![tests](https://github.com/bjornaer/sailor/actions/workflows/push.yaml/badge.svg)
+![tests](https://github.com/bjornaer/sailor/actions/workflows/push.yaml/badge.svg)[![Go Report Card](https://goreportcard.com/badge/github.com/bjornaer/sailor)](https://goreportcard.com/report/github.com/bjornaer/sailor)
 
 *Ahoy matey!* Welcome to sailor, your very own Port Domain Service!
 
