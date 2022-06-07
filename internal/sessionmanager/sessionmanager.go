@@ -16,12 +16,15 @@ type SessionManager struct {
 
 func (sm *SessionManager) ProcessPorts(c *gin.Context) {
 	err := port.HandlePorts(sm.UpdatesFile, func(portKey string, portData port.PortData) {
-		fmt.Printf("| Port Key: %s | Port Name: %v | \n", portKey, portData.Name)
 		portDataStr, err := portData.Serialize()
+		fmt.Println(portDataStr)
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
 		}
-		sm.DBClient.Put(portKey, portDataStr)
+		err = sm.DBClient.Put(portKey, portDataStr)
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+		}
 	})
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
@@ -40,4 +43,18 @@ func (sm *SessionManager) GetPort(c *gin.Context) {
 		c.AbortWithError(http.StatusInternalServerError, err)
 	}
 	c.JSON(http.StatusOK, portData)
+}
+
+func (sm *SessionManager) PutPort(c *gin.Context) {
+	var port port.PortData
+	c.BindJSON(&port)
+	portString, err := port.Serialize()
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	err = sm.DBClient.Put(port.Unlocs[0], portString)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	c.String(http.StatusOK, "Port Created/Updated successfully")
 }

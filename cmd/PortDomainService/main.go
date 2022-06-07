@@ -32,7 +32,7 @@ func getEnvVars() (string, string, string) {
 
 func main() {
 	dbAddr, dbBackend, portsFileName := getEnvVars()
-	dbClient, err := db.InitDBClient(dbBackend, dbAddr)
+	dbClient, err := db.InitDBClientWithRetry(5, dbBackend, dbAddr)
 	if err != nil {
 		log.Fatal("Failed initialising DB connection")
 	}
@@ -40,7 +40,7 @@ func main() {
 	router := SetupRouter(sm)
 
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":8081",
 		Handler: router,
 	}
 

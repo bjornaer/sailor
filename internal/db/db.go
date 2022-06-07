@@ -1,5 +1,9 @@
 package db
 
+import (
+	"time"
+)
+
 // DBClient interface just handles strings *but* I would totally use generics here
 type DBClient interface {
 	Put(k, v string) error
@@ -23,4 +27,19 @@ func InitDBClient(clientType ...string) (DBClient, error) {
 		// Ideally we mighjjt have more DB type of options and handle those
 		return NewMapDBClient()
 	}
+}
+
+func InitDBClientWithRetry(retry int, clientType ...string) (DBClient, error) {
+	i := 0
+	var err error
+	var client DBClient
+	for i < retry {
+		client, err = InitDBClient(clientType...)
+		if err == nil {
+			break
+		}
+		time.Sleep(1 * time.Second)
+		i++
+	}
+	return client, err
 }

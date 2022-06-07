@@ -1,0 +1,41 @@
+version: '3'
+services:
+  app:
+    container_name: sailor
+    build: .
+    environment:
+      - DB_BACKEND=redis  
+      - DB_ADDR=sailor-redis:6379
+      - PORTS_FILE=./ports.json
+    ports: 
+      - 8081:8081
+    restart: on-failure
+    volumes:
+      - ./ports.json:/ports.json
+    depends_on:
+      - sailor-redis
+    networks:
+      - sailor
+
+
+  sailor-redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+      - REDIS_PORT_NUMBER=6379
+    ports:
+      - '6379:6379'
+    volumes: 
+      - redis_data:/data
+    networks:
+      - sailor
+
+volumes:
+  redis_data:
+    driver: local
+
+# Networks to be created to facilitate communication between containers
+networks:
+  sailor:
+    driver: bridge

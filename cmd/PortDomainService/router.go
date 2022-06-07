@@ -14,5 +14,6 @@ func SetupRouter(sm *s.SessionManager) *gin.Engine {
 	})
 	router.GET("/process", sm.ProcessPorts)
 	router.GET("/port/:portid", sm.GetPort)
+	router.POST("port", sm.PutPort)
 	return router
 }
