@@ -8,7 +8,7 @@ type DBClient interface {
 
 // InitDBClient takes variadic args, if none is given it uses an in memory Map
 // if "etcd" is passed, a second argument for the address is required
-func InitDBClient(clientType ...string) DBClient {
+func InitDBClient(clientType ...string) (DBClient, error) {
 	return NewMapDBClient()
 	// if len(clientType) == 0 {
 	// 	// default use in memory map

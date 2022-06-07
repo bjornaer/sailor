@@ -22,7 +22,10 @@ func main() {
 	if len(portsFileName) == 0 {
 		portsFileName = "./ports.json"
 	}
-	dbClient := db.InitDBClient() // "etcd", etcdAddr
+	dbClient, err := db.InitDBClient() // "etcd", etcdAddr
+	if err != nil {
+		log.Fatal("Failed initialising DB connection")
+	}
 	sm := &s.SessionManager{UpdatesFile: portsFileName, DBClient: dbClient}
 	router := SetupRouter(sm)
 

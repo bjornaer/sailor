@@ -56,7 +56,7 @@ func (s *UnitTestSuite) SetupTest() {
 	if err := tmpfile.Close(); err != nil {
 		log.Fatal(err)
 	}
-	s.dbClient = db.InitDBClient()
+	s.dbClient, _ = db.InitDBClient()
 	s.tmpfile = tmpfile
 }
 

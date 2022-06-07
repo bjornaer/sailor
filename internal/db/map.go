@@ -19,6 +19,6 @@ func (m *MapDB) Put(k, v string) error {
 	return nil
 }
 
-func NewMapDBClient() *MapDB {
-	return &MapDB{Storage: make(map[string]string)}
+func NewMapDBClient() (*MapDB, error) {
+	return &MapDB{Storage: make(map[string]string)}, nil
 }
