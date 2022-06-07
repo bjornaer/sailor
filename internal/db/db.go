@@ -7,21 +7,20 @@ type DBClient interface {
 }
 
 // InitDBClient takes variadic args, if none is given it uses an in memory Map
-// if "etcd" is passed, a second argument for the address is required
+// if "redis" is passed, a second argument for the address is required
 func InitDBClient(clientType ...string) (DBClient, error) {
-	return NewMapDBClient()
-	// if len(clientType) == 0 {
-	// 	// default use in memory map
-	// 	return NewMapDBClient()
-	// }
-	// // if not default use whatever came from variable first
-	// dbClientType := clientType[0]
-	// if dbClientType == "etcd" {
-	// 	address := clientType[1]
-	// 	return NewEtcdClient(address)
-	// } else {
-	// 	// for anything else we go back to the in memory map
-	// 	// Ideally we mighjjt have more DB type of options and handle those
-	// 	return NewMapDBClient()
-	// }
+	if len(clientType) == 0 {
+		// default use in memory map
+		return NewMapDBClient()
+	}
+	// if not default use whatever came from variable first
+	dbClientType := clientType[0]
+	if dbClientType == "redis" {
+		address := clientType[1]
+		return NewRedisClient(address)
+	} else {
+		// for anything else we go back to the in memory map
+		// Ideally we mighjjt have more DB type of options and handle those
+		return NewMapDBClient()
+	}
 }

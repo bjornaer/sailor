@@ -14,15 +14,15 @@ import (
 )
 
 func main() {
-	etcdAddr := os.Getenv("ETCD_ADDR")
-	if len(etcdAddr) == 0 {
-		etcdAddr = "127.0.0.1:2379"
+	redisAddr := os.Getenv("REDIS_ADDR")
+	if len(redisAddr) == 0 {
+		redisAddr = "localhost:6379"
 	}
 	portsFileName := os.Getenv("PORTS_FILE")
 	if len(portsFileName) == 0 {
 		portsFileName = "./ports.json"
 	}
-	dbClient, err := db.InitDBClient() // "etcd", etcdAddr
+	dbClient, err := db.InitDBClient() // "redis", redisAddr
 	if err != nil {
 		log.Fatal("Failed initialising DB connection")
 	}
