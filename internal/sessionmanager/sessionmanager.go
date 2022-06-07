@@ -1,7 +1,6 @@
 package sessionmanager
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/bjornaer/sailor/internal/db"
@@ -17,7 +16,6 @@ type SessionManager struct {
 func (sm *SessionManager) ProcessPorts(c *gin.Context) {
 	err := port.HandlePorts(sm.UpdatesFile, func(portKey string, portData port.PortData) {
 		portDataStr, err := portData.Serialize()
-		fmt.Println(portDataStr)
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
 		}

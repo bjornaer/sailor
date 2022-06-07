@@ -8,7 +8,7 @@ This is a service which runs a very rudimentary Gin Gonic server, whose sole pur
 ---
 ### Run 
 
-To run this with a *Redis* instance as a DB first setup a redis locally (however you prefer) set the ENV variable `DB_ADDR=<your redis address>` and `DB_BACKEND="redis"`
+To run this with a *Redis* instance as a DB first setup a redis locally (however you prefer) set the ENV variable `DB_ADDR=<your-redis-address>` and `DB_BACKEND="redis"`
 
 
 To run this using a map in memory simply follow the below instruction:
@@ -18,10 +18,12 @@ To run this using a map in memory simply follow the below instruction:
 To run this _bad boy_ simply use the [Makefile](./Makefile)'s command
 
 ```sh
-make <YOUR_OS>
+make [darwin|windows|linux]
 ```
 
-and then call on the binary!
+and then invoque the binary!
+
+You could do `go run .cmd/PortDomainService/` *savvy*?
 
 ---
 ### API
@@ -36,6 +38,23 @@ The data file can be passed in as an ENV var under the name `PORTS_FILE`.
 - `GET /process`
 - `GET /`
 
+#### EXAMPLES
+- `POST /port`
+    ```sh
+    curl -d '{"name": "Apia","city": "Apia","country": "Samoa","alias": [],"regions": [],"coordinates": [-171.7513551,-13.8506958],"province": "Upolu","timezone": "Pacific/Apia","unlocs": ["WSAPW"],"code": "77777"}' -H "Content-Type: application/json" -X POST http://localhost:8081/port
+    ```
+- `GET /port/<port-id>`
+    ```sh
+    curl http://localhost:8081/port/WSAPW
+    ```
+- `GET /process`
+    ```sh
+    curl http://localhost:8081/process
+    ```
+- `GET /`
+    ```sh
+    curl http://localhost:8081/
+    ```
 ---
 ### Docker
 
