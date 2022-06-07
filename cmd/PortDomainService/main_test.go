@@ -83,7 +83,7 @@ func (s *UnitTestSuite) Test_TableTest() {
 		},
 		{
 			name:             "Port Processing Endpoint",
-			endpoint:         "process",
+			endpoint:         "/process",
 			expectedResponse: "Finished updating DB with ports data!",
 		},
 	}
