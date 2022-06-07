@@ -18,7 +18,9 @@ import (
 
 type UnitTestSuite struct {
 	suite.Suite
-	router *gin.Engine
+	router   *gin.Engine
+	tmpfile  *os.File
+	dbClient db.DBClient
 }
 
 func (s *UnitTestSuite) SetupTest() {
@@ -46,7 +48,7 @@ func (s *UnitTestSuite) SetupTest() {
 		log.Fatal(err)
 	}
 
-	defer os.Remove(tmpfile.Name()) // clean up
+	// defer os.Remove(tmpfile.Name()) // clean up
 
 	if _, err := tmpfile.Write(content); err != nil {
 		log.Fatal(err)
@@ -54,18 +56,20 @@ func (s *UnitTestSuite) SetupTest() {
 	if err := tmpfile.Close(); err != nil {
 		log.Fatal(err)
 	}
-	dbClient := db.InitDBClient()
+	s.dbClient = db.InitDBClient()
+	s.tmpfile = tmpfile
+}
+
+func (s *UnitTestSuite) BeforeTest(suiteName, testName string) {
+	tmpfile := s.tmpfile
+	dbClient := s.dbClient
 	sm := &sm.SessionManager{UpdatesFile: tmpfile.Name(), DBClient: dbClient}
 	s.router = p.SetupRouter(sm)
 }
 
-// func (s *UnitTestSuite) BeforeTest(suiteName, testName string) {
-//     log.Info("before test")
-// }
-
-// func (s *UnitTestSuite) AfterTest(suiteName, testName string) {
-//     log.Info("After test")
-// }
+func (s *UnitTestSuite) AfterTest(suiteName, testName string) {
+	os.Remove(s.tmpfile.Name())
+}
 
 func (s *UnitTestSuite) Test_TableTest() {
 
