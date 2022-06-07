@@ -1,4 +1,5 @@
 # sailor
+![tests](https://github.com/bjornaer/sailor/actions/workflows/push.yaml/badge.svg)
 
 *Ahoy matey!* Welcome to sailor, your very own Port Domain Service!
 
