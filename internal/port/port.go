@@ -2,7 +2,11 @@ package port
 
 import (
 	"bufio"
+	"bytes"
+	"encoding/base64"
+	"encoding/gob"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -20,6 +24,31 @@ type PortData struct {
 	Timezone    string    `json:"timezone"`
 	Unlocs      []string  `json:"unlocs"`
 	Code        string    `json:"code"`
+}
+
+func (p *PortData) Serialize() (string, error) {
+	b := new(bytes.Buffer)
+	e := gob.NewEncoder(b)
+	err := e.Encode(p)
+	if err != nil {
+		return string(b.Bytes()[:]), errors.New("serialization failed")
+	}
+	return base64.StdEncoding.EncodeToString(b.Bytes()), nil
+}
+
+func DeserializePort(str string) (*PortData, error) {
+	var p PortData
+	by, err := base64.StdEncoding.DecodeString(str)
+	if err != nil {
+		return nil, errors.New("deserialization failed")
+	}
+	b := new(bytes.Buffer)
+	b.Write(by)
+	dec := gob.NewDecoder(b)
+	if err := dec.Decode(&p); err != nil {
+		return nil, errors.New("deserialization failed")
+	}
+	return &p, nil
 }
 
 type PortHandler func(portKey string, portData PortData)
