@@ -28,3 +28,16 @@ func (sm *SessionManager) ProcessPorts(c *gin.Context) {
 	}
 	c.String(http.StatusOK, "Finished updating DB with ports data!")
 }
+
+func (sm *SessionManager) GetPort(c *gin.Context) {
+	portKey := c.Param("portid")
+	portDataSerialized, err := sm.DBClient.Get(portKey)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	portData, err := port.DeserializePort(portDataSerialized)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	c.JSON(http.StatusOK, portData)
+}

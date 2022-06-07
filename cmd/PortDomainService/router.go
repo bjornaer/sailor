@@ -13,5 +13,6 @@ func SetupRouter(sm *s.SessionManager) *gin.Engine {
 		c.String(http.StatusOK, "Hello Sailor! Welcome to the Port Domain Service!")
 	})
 	router.GET("/process", sm.ProcessPorts)
+	router.GET("/port/:portid", sm.GetPort)
 	return router
 }
